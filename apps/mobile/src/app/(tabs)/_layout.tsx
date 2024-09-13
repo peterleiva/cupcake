@@ -1,25 +1,24 @@
 import { Tabs } from 'expo-router';
-import EvilIcons from '@expo/vector-icons/EvilIcons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function TabsLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}>
+    <Tabs screenOptions={{ tabBarActiveTintColor: '#8B4513' }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'Para Você',
           tabBarIcon: ({ color, size }) => (
-            <EvilIcons source="checkmark-circle" color={color} size={size} />
+            <FontAwesome name="home" color={color} size={size} />
           ),
         }}
       />
       <Tabs.Screen
         name="search"
         options={{
-          title: 'Search',
+          title: 'Buscar',
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome source="search" color={'green'} size={32} />
+            <FontAwesome name="search" color={color} size={size} />
           ),
         }}
       />
