@@ -34,7 +34,8 @@
     "tslib": "*",
     "@expo/metro-config": "*",
     "react-native-svg-transformer": "*",
-    "react": "*"
+    "react": "*",
+    "@expo/vector-icons": "*"
   },
   "scripts": {
     "eas-build-post-install": "cd ../../ && node tools/scripts/eas-build-post-install.mjs . apps/mobile"
