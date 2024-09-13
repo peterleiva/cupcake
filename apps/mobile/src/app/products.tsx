@@ -5,7 +5,7 @@ export default function Page() {
     <div>
       <h1>Home</h1>
       <p>Welcome to the Products page</p>
-      <Link></Link>
+      <Link href="/">Home</Link>
     </div>
   );
 }
