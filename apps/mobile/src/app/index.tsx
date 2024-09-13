@@ -1,11 +1,18 @@
 import { Link } from 'expo-router';
+import { Text, View } from 'react-native';
 
 export default function Page() {
   return (
-    <div>
-      <h1>Home</h1>
-      <p>Welcome to the home page</p>
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <Text>Home</Text>
+      <Text>Welcome to the home page</Text>
       <Link href="/products">Produtos</Link>
-    </div>
+    </View>
   );
 }

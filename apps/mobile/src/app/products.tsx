@@ -1,11 +1,12 @@
 import { Link } from 'expo-router';
+import { Text, View } from 'react-native';
 
 export default function Page() {
   return (
-    <div>
-      <h1>Home</h1>
-      <p>Welcome to the Products page</p>
+    <View>
+      <Text>Home</Text>
+      <Text>Welcome to the Products page</Text>
       <Link href="/">Home</Link>
-    </div>
+    </View>
   );
 }
