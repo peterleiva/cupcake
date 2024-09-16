@@ -10,7 +10,11 @@ export default function CatalogCard() {
         <AntDesign style={style.likeBtn} name="hearto" size={16} color="red" />
       </View>
       <Image
-        style={{ width: '100%', height: 150 }}
+        style={{
+          height: 150,
+          borderTopLeftRadius: 12,
+          borderTopRightRadius: 12,
+        }}
         source={{ uri: 'https://picsum.photos/200/150' }}
       ></Image>
       <View style={style.caption}>
@@ -27,8 +31,6 @@ export default function CatalogCard() {
 
 const style = StyleSheet.create({
   container: {
-    borderRadius: 20,
-    overflow: Platform.OS === 'ios' ? 'hidden' : 'visible',
     position: 'relative',
   },
   actions: {
@@ -36,9 +38,9 @@ const style = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     flexDirection: 'row',
-    width: '90%',
+    width: '95%',
     top: '5%',
-    left: '5%',
+    left: '2.5%',
     zIndex: 1,
   },
   likeBtn: {
@@ -60,8 +62,7 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     fontWeight: '500',
-    paddingVertical: 10,
-    paddingHorizontal: 5,
+    padding: 10,
   },
 
   captionPrice: {
