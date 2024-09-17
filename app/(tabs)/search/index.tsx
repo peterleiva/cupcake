@@ -1,35 +1,13 @@
-import { FlatList, LogBox, Text, View } from 'react-native';
 import { Suspense } from 'react';
+import { FlatList, Text, View } from 'react-native';
 
 import { CatalogCard, CategoryList } from '@/components/catalog';
-import { range } from '@/libs';
-import { API } from '@/app.env';
-import { useQuery } from '@tanstack/react-query';
-import { sleep } from '@/libs/sleep';
+import { useGetCategories } from '@/hooks/categories';
 import { useRefreshOnFocus } from '@/hooks/useAppFocus';
-
-export type Category = {
-  _id: string;
-  name: string;
-  slug: string;
-};
-
-async function getAllCategories(): Promise<Category[]> {
-  const url = `${API}/category`;
-  const res = await fetch(url);
-
-  if (!res.ok) {
-    throw new Error('Erro ao buscar categorias');
-  }
-
-  return res.json();
-}
+import { range } from '@/libs';
 
 const Search = () => {
-  const { data, refetch } = useQuery({
-    queryKey: ['categories'],
-    queryFn: getAllCategories,
-  });
+  const { data, refetch } = useGetCategories();
 
   useRefreshOnFocus(refetch);
 
