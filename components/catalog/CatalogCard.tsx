@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, Platform } from 'react-native';
+import { View, Text, Image, StyleSheet, Platform, LogBox } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Card } from 'react-native-paper';
 

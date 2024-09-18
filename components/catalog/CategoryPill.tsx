@@ -1,11 +1,7 @@
-import { Button } from 'react-native';
+import { Button, ButtonProps } from 'react-native';
 
-type CategoryPillProps = {
-  name: string;
-};
-
-const CategoryPill = ({ name }: CategoryPillProps) => {
-  return <Button title={name}></Button>;
+const CategoryPill = ({ title, ...btnProps }: ButtonProps) => {
+  return <Button title={title} {...btnProps}></Button>;
 };
 
 export default CategoryPill;

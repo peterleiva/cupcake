@@ -1,31 +1,38 @@
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { Suspense } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 
-import { CatalogCard, CategoryList } from '@/components/catalog';
-import { useGetCategories } from '@/hooks/categories';
-import { useRefreshOnFocus } from '@/hooks/useAppFocus';
-import { range } from '@/libs';
+import { CatalogList, CategoryList } from '@/components/catalog';
+
+type SearchParams = Record<string, { category: string }>;
 
 const Search = () => {
-  const { data, refetch } = useGetCategories();
-
-  useRefreshOnFocus(refetch);
+  const { params } = useRoute<RouteProp<SearchParams>>();
 
   return (
-    <View>
-      <Suspense fallback={<Text>carregando...</Text>}>
-        <CategoryList categories={data?.map?.((d) => d.name)} />
-      </Suspense>
-      <FlatList
-        style={{ padding: 20 }}
-        ListEmptyComponent={() => <Text>Nenhum item encontrado</Text>}
-        data={range(1, 10)}
-        numColumns={1}
-        ItemSeparatorComponent={() => <View style={{ height: 20 }}></View>}
-        renderItem={() => <CatalogCard></CatalogCard>}
-      ></FlatList>
-    </View>
+    <Suspense
+      fallback={
+        <ActivityIndicator
+          animating={true}
+          size="large"
+          color={MD2Colors.brown300}
+          style={style.loader}
+        />
+      }
+    >
+      <CategoryList />
+      <CatalogList category={params?.category} />
+    </Suspense>
   );
 };
+
+const style = StyleSheet.create({
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default Search;
