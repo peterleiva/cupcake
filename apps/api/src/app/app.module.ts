@@ -5,9 +5,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CategoryModule } from './modules/category';
 import { DATABASE_CONNECTION } from './app.constants';
+import { ProductsModule } from './modules/products/products.module';
 
 @Module({
-  imports: [MongooseModule.forRoot(DATABASE_CONNECTION), CategoryModule],
+  imports: [
+    MongooseModule.forRoot(DATABASE_CONNECTION),
+    CategoryModule,
+    ProductsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

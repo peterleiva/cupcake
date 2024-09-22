@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Category } from './schema/category';
 import { Model } from 'mongoose';
@@ -23,7 +28,13 @@ export class CategoryService {
   }
 
   async delete(id: string): Promise<Category> {
-    const data = await this.categoryModel.findByIdAndDelete(id).exec();
+    const category = await this.categoryModel.findById(id);
+
+    if (!category) {
+      throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
+    }
+
+    const data = await this.categoryModel.findOneAndDelete({ _id: id }).exec();
 
     return data;
   }
