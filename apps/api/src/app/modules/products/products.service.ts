@@ -1,15 +1,43 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Product, ProductModel } from './schema/products.schema';
-import { ProductDTO } from './products.interface';
 import { isValidObjectId } from 'mongoose';
+
+import { Page, PagedResult, PaginationConst } from '../../shared/pagination';
+import { ProductDTO } from './products.interface';
+import { Product, ProductModel } from './schema/products.schema';
 
 @Injectable()
 export class ProductsService {
   constructor(@InjectModel(Product.name) private model: ProductModel) {}
 
-  async getAll() {
-    return this.model.find().exec();
+  async getAll(
+    { pageIndex = 0, pageSize = PaginationConst.PAGE_SIZE }: Partial<Page> = {},
+    categoryID?: string
+  ): Promise<PagedResult<Product>> {
+    const total = await this.model.countDocuments().exec();
+    const products = await this.model
+      .aggregate([
+        {
+          $match:
+            categoryID && isValidObjectId(categoryID)
+              ? { category: categoryID }
+              : {},
+        },
+        { $sort: { createdAt: -1 } },
+        { $skip: pageSize * pageIndex },
+        { $limit: pageSize },
+        { $project: { _id: false, thumbnail: false } },
+      ])
+      .exec();
+
+    return {
+      pageIndex,
+      pageSize,
+      total,
+      lastPage: Math.ceil(total / pageSize),
+      isFinalPage: pageSize * (pageIndex + 1) >= total,
+      data: products,
+    };
   }
 
   async create(data: ProductDTO) {

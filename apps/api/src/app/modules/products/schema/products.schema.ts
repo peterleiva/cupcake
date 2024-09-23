@@ -10,6 +10,7 @@ export type ProductDocument = HydratedDocument<Product>;
 export class Product {
   @Prop({
     required: true,
+    index: true,
   })
   name: string;
 
@@ -23,6 +24,7 @@ export class Product {
 
   @Prop({
     type: Types.Buffer,
+    select: false,
   })
   thumbnail: Buffer;
 

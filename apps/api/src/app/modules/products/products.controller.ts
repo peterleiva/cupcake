@@ -7,6 +7,7 @@ import {
   Param,
   ParseFilePipe,
   Post,
+  Query,
   Res,
   UploadedFile,
   UseInterceptors,
@@ -16,14 +17,26 @@ import { Express, Response } from 'express';
 
 import { ProductsService } from './products.service';
 import { ProductDTO } from './products.interface';
+import { PAGE_SIZE } from '../../shared/pagination/pagination.const';
+import { PaginationConst } from '../../shared/pagination';
 
 @Controller('products')
 export class ProductsController {
   constructor(private service: ProductsService) {}
 
   @Get()
-  getAll() {
-    return this.service.getAll();
+  getAll(
+    @Query('page') pageIndex: number,
+    @Query('limit') pageSize: number,
+    @Query('category') categoryID: string
+  ) {
+    return this.service.getAll(
+      {
+        pageIndex: +pageIndex || 0,
+        pageSize: +pageSize || PaginationConst.PAGE_SIZE,
+      },
+      categoryID
+    );
   }
 
   @Post()
