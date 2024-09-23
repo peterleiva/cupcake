@@ -1,12 +1,12 @@
 import { DateTime } from 'luxon';
-import { Category } from '../categories';
+import { Category, CategoryDTO } from '../categories';
 
 export interface ProductDTO {
   _id: string;
   name: string;
   description?: string;
   price: number;
-  category?: string;
+  category?: CategoryDTO;
   createdAt: string;
   updatedAt: string;
 }

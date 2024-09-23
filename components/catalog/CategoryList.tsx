@@ -17,7 +17,7 @@ const CategoryList = ({ showAll = true }: CategoryListProps) => {
   const clickHandler = (category?: Category) => {
     navigate({
       pathname: '/search',
-      params: { category: category?._id },
+      params: { category: category?.id },
     });
   };
 
@@ -31,8 +31,8 @@ const CategoryList = ({ showAll = true }: CategoryListProps) => {
 
       {data?.map?.((category) => (
         <CategoryPill
-          key={category._id}
-          active={categoryId === category._id}
+          key={category.id}
+          active={categoryId === category.id}
           onPress={() => clickHandler(category)}
         >
           {category.name}
