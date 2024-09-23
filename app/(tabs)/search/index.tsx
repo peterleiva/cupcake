@@ -1,20 +1,16 @@
-import { RouteProp, useRoute } from '@react-navigation/native';
 import { Suspense } from 'react';
-import { StyleSheet } from 'react-native';
-import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 
 import { CatalogList, CategoryList } from '@/components/catalog';
 import Loader from '@/components/Loader';
-
-type SearchParams = Record<string, { category: string }>;
+import { useSearchScreenParams } from '@/hooks/useSearchParams';
 
 const Search = () => {
-  const { params } = useRoute<RouteProp<SearchParams>>();
+  const { category } = useSearchScreenParams();
 
   return (
     <Suspense fallback={<Loader />}>
       <CategoryList />
-      <CatalogList category={params?.category} />
+      <CatalogList category={category} />
     </Suspense>
   );
 };

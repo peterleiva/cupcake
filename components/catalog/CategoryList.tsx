@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { Category, useGetCategories } from '@/hooks/categories';
 import CategoryPill from './CategoryPill';
+import { useSearchScreenParams } from '@/hooks/useSearchParams';
 
 interface CategoryListProps {
   showAll?: boolean;
@@ -11,6 +12,7 @@ interface CategoryListProps {
 const CategoryList = ({ showAll = true }: CategoryListProps) => {
   const { data } = useGetCategories();
   const { navigate } = useRouter();
+  const { category: categoryId } = useSearchScreenParams();
 
   const clickHandler = (category?: Category) => {
     navigate({
@@ -22,11 +24,17 @@ const CategoryList = ({ showAll = true }: CategoryListProps) => {
   return (
     <View style={style.container}>
       {showAll && (
-        <CategoryPill onPress={() => clickHandler()}>Todos</CategoryPill>
+        <CategoryPill active={!categoryId} onPress={() => clickHandler()}>
+          Todos
+        </CategoryPill>
       )}
 
       {data?.map?.((category) => (
-        <CategoryPill key={category._id} onPress={() => clickHandler(category)}>
+        <CategoryPill
+          key={category._id}
+          active={categoryId === category._id}
+          onPress={() => clickHandler(category)}
+        >
           {category.name}
         </CategoryPill>
       ))}
