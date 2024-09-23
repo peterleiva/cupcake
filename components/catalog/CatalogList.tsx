@@ -1,10 +1,8 @@
-import { View, Text, FlatList, RefreshControlComponent } from 'react-native';
+import { useGetProducts } from '@/hooks/products';
 import React from 'react';
-import { range } from '@/libs';
-import CatalogCard from './CatalogCard';
-import { Product, useGetProducts } from '@/hooks/products';
-import { RefreshControl } from 'react-native-gesture-handler';
+import { FlatList, View } from 'react-native';
 import EmptyState from '../EmptyState';
+import CatalogCard from './CatalogCard';
 
 interface CatalogCardProps {
   category: string | null | undefined;
@@ -24,7 +22,11 @@ export default function CatalogList({ category }: CatalogCardProps) {
       ItemSeparatorComponent={() => <View style={{ height: 20 }}></View>}
       id="_id"
       renderItem={({ item: product }) => (
-        <CatalogCard name={product.name} price={product.price}></CatalogCard>
+        <CatalogCard
+          name={product.name}
+          price={product.price}
+          category={product.category?.name}
+        ></CatalogCard>
       )}
     ></FlatList>
   );

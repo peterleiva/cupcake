@@ -7,7 +7,13 @@ export function productsMapper(product: ProductDTO): Product {
     name: product.name,
     description: product.description,
     price: product.price,
-    categoryID: product.categoryID,
+    category: product.category
+      ? {
+          _id: product.category,
+          name: 'category X',
+          slug: 'slug-x',
+        }
+      : undefined,
     createdAt: DateTime.fromISO(product.createdAt),
     updatedAt: DateTime.fromISO(product.updatedAt),
   };

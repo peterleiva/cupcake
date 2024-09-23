@@ -4,25 +4,31 @@ import { StyleSheet, View } from 'react-native';
 import { Category, useGetCategories } from '@/hooks/categories';
 import CategoryPill from './CategoryPill';
 
-const CategoryList = () => {
+interface CategoryListProps {
+  showAll?: boolean;
+}
+
+const CategoryList = ({ showAll = true }: CategoryListProps) => {
   const { data } = useGetCategories();
   const { navigate } = useRouter();
 
-  const clickCategory = (category: Category) => {
+  const clickHandler = (category?: Category) => {
     navigate({
       pathname: '/search',
-      params: { category: category._id },
+      params: { category: category?._id },
     });
   };
 
   return (
     <View style={style.container}>
+      {showAll && (
+        <CategoryPill onPress={() => clickHandler()}>Todos</CategoryPill>
+      )}
+
       {data?.map?.((category) => (
-        <CategoryPill
-          key={category._id}
-          children={category.name}
-          onPress={() => clickCategory(category)}
-        />
+        <CategoryPill key={category._id} onPress={() => clickHandler(category)}>
+          {category.name}
+        </CategoryPill>
       ))}
     </View>
   );
@@ -30,10 +36,9 @@ const CategoryList = () => {
 
 const style = StyleSheet.create({
   container: {
-    marginVertical: 20,
+    margin: 20,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
     gap: 4,
   },
 });

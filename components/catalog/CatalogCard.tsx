@@ -6,13 +6,18 @@ import { formatCurrency } from '@/libs/currency';
 export interface CatalogCardProps {
   name: string;
   price: number;
+  category?: string;
 }
 
-export default function CatalogCard({ name, price }: CatalogCardProps) {
+export default function CatalogCard({
+  name,
+  price,
+  category,
+}: CatalogCardProps) {
   return (
     <Card style={style.container}>
       <View style={style.actions}>
-        <Text style={style.category}>Aniversário</Text>
+        {category && <Text style={style.category}>{category}</Text>}
         <AntDesign style={style.likeBtn} name="hearto" size={16} color="red" />
       </View>
       <Image
