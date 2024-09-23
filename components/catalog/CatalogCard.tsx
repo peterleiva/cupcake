@@ -1,8 +1,14 @@
 import { View, Text, Image, StyleSheet, Platform, LogBox } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Card } from 'react-native-paper';
+import { formatCurrency } from '@/libs/currency';
 
-export default function CatalogCard() {
+export interface CatalogCardProps {
+  name: string;
+  price: number;
+}
+
+export default function CatalogCard({ name, price }: CatalogCardProps) {
   return (
     <Card style={style.container}>
       <View style={style.actions}>
@@ -19,10 +25,10 @@ export default function CatalogCard() {
       ></Image>
       <View style={style.caption}>
         <View>
-          <Text>Cherry Candy</Text>
+          <Text>{name}</Text>
         </View>
         <View>
-          <Text style={style.captionPrice}>R$ 175,00</Text>
+          <Text style={style.captionPrice}>{formatCurrency(price)}</Text>
         </View>
       </View>
     </Card>

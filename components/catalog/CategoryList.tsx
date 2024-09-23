@@ -20,7 +20,7 @@ const CategoryList = () => {
       {data?.map?.((category) => (
         <CategoryPill
           key={category._id}
-          title={category.name}
+          children={category.name}
           onPress={() => clickCategory(category)}
         />
       ))}
@@ -30,6 +30,7 @@ const CategoryList = () => {
 
 const style = StyleSheet.create({
   container: {
+    marginVertical: 20,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',

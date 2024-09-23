@@ -1,7 +1,7 @@
-import { Button, ButtonProps } from 'react-native';
+import { Button, ButtonProps } from 'react-native-paper';
 
-const CategoryPill = ({ title, ...btnProps }: ButtonProps) => {
-  return <Button title={title} {...btnProps}></Button>;
+const CategoryPill = ({ ...btnProps }: Omit<ButtonProps, 'mode'>) => {
+  return <Button mode="outlined" compact={true} {...btnProps}></Button>;
 };
 
 export default CategoryPill;

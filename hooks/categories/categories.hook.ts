@@ -1,4 +1,4 @@
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getAllCategories } from './categories.api';
 
 export function useGetCategories() {
