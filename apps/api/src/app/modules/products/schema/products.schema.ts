@@ -21,8 +21,10 @@ export class Product {
   })
   price: number;
 
-  @Prop()
-  thumbnail: string;
+  @Prop({
+    type: Types.Buffer,
+  })
+  thumbnail: Buffer;
 
   @Prop({
     type: Types.ObjectId,
