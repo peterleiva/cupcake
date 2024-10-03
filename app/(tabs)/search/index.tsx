@@ -15,17 +15,17 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Search = () => {
-  const { category: categoryId } = useSearchScreenParams();
+  const { category: categoryId, favorites } = useSearchScreenParams();
   const [searchQuery, setSearchQuery] = useState('');
   const { navigate } = useRouter();
   const { showModal } = useModal();
 
-  const haveFilter: boolean = !!categoryId;
+  const isFilterApplied: boolean = !!categoryId || !!favorites;
 
-  const onApplyFilter = ({ category }: CatalogFilterParams) => {
+  const onApplyFilter = ({ category, favorites }: CatalogFilterParams) => {
     navigate({
       pathname: '/search',
-      params: { category: category?.id },
+      params: { category: category?.id, favorites: favorites ? 1 : 0 },
     });
   };
 
@@ -43,12 +43,16 @@ const Search = () => {
             name="filter"
             size={24}
             onPress={showModal}
-            color={haveFilter ? 'brown' : 'black'}
+            color={isFilterApplied ? 'brown' : 'black'}
           />
         </View>
         <CatalogList category={categoryId} />
       </SafeAreaView>
-      <CatalogFilterModal category={categoryId} onFilter={onApplyFilter} />
+      <CatalogFilterModal
+        category={categoryId}
+        favorites={favorites}
+        onFilter={onApplyFilter}
+      />
     </Suspense>
   );
 };
