@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Chip, ChipProps } from 'react-native-paper';
+import { Chip, ChipProps } from 'react-native-paper';
 
 export interface CategoryPillProps extends Omit<ChipProps, 'mode'> {
   active?: boolean;

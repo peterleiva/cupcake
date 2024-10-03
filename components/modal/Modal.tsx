@@ -1,5 +1,10 @@
 import { StyleSheet, View } from 'react-native';
-import { Button, Modal as ModalPaper, Portal } from 'react-native-paper';
+import {
+  Button,
+  Divider,
+  Modal as ModalPaper,
+  Portal,
+} from 'react-native-paper';
 import { useModal } from './modal.hook';
 
 interface ModalProps {
@@ -20,14 +25,16 @@ export function Modal({ children, showActions = true, onApply }: ModalProps) {
     <Portal>
       <ModalPaper visible={visible} onDismiss={hideModal} style={styles.modal}>
         {children}
-
         {showActions && (
-          <View style={styles.modalActions}>
-            <Button onPress={hideModal}>cancelar</Button>
-            <Button icon="check" mode="contained" onPress={applyHandler}>
-              aplicar
-            </Button>
-          </View>
+          <>
+            <Divider />
+            <View style={styles.modalActions}>
+              <Button onPress={hideModal}>cancelar</Button>
+              <Button icon="check" mode="contained" onPress={applyHandler}>
+                aplicar
+              </Button>
+            </View>
+          </>
         )}
       </ModalPaper>
     </Portal>
@@ -36,14 +43,20 @@ export function Modal({ children, showActions = true, onApply }: ModalProps) {
 
 const styles = StyleSheet.create({
   modal: {
-    justifyContent: 'space-between',
     padding: 16,
-    gap: 10,
     backgroundColor: 'white',
+    margin: 0,
+    marginTop: '20%',
+    borderRadius: 8,
+    justifyContent: 'flex-end',
+  },
+  content: {
+    marginBottom: 16,
   },
   modalActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingTop: 16,
   },
 });

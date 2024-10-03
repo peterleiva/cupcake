@@ -1,25 +1,28 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Searchbar, Text } from 'react-native-paper';
+import { Searchbar } from 'react-native-paper';
 
-import { CatalogList, CategoryList } from '@/components/catalog';
+import { CatalogList } from '@/components/catalog';
+import {
+  CatalogFilterModal,
+  CatalogFilterParams,
+} from '@/components/catalog/CatalogFilterModal';
 import Loader from '@/components/Loader';
+import { useModal } from '@/components/modal';
 import { useSearchScreenParams } from '@/hooks/useSearchParams';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Modal, useModal } from '@/components/modal';
 import { useRouter } from 'expo-router';
-import { Category } from '@/hooks/categories';
-import { useDebounce } from '@uidotdev/usehooks';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Search = () => {
   const { category: categoryId } = useSearchScreenParams();
   const [searchQuery, setSearchQuery] = useState('');
-  const [category, setCategory] = useState<Category | null>(null);
   const { navigate } = useRouter();
   const { showModal } = useModal();
 
-  const onApplyFilter = () => {
+  const haveFilter: boolean = !!categoryId;
+
+  const onApplyFilter = ({ category }: CatalogFilterParams) => {
     navigate({
       pathname: '/search',
       params: { category: category?.id },
@@ -36,17 +39,16 @@ const Search = () => {
             value={searchQuery}
             style={styles.searchBar}
           />
-          <AntDesign name="filter" size={24} onPress={showModal} />
+          <AntDesign
+            name="filter"
+            size={24}
+            onPress={showModal}
+            color={haveFilter ? 'brown' : 'black'}
+          />
         </View>
         <CatalogList category={categoryId} />
       </SafeAreaView>
-
-      <Modal onApply={onApplyFilter}>
-        <View>
-          <Text variant="titleLarge">Categoria</Text>
-          <CategoryList category={categoryId} onPress={setCategory} />
-        </View>
-      </Modal>
+      <CatalogFilterModal category={categoryId} onFilter={onApplyFilter} />
     </Suspense>
   );
 };
