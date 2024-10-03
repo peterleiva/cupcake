@@ -24,7 +24,6 @@ export default function CatalogList({ category }: CatalogCardProps) {
     <FlatList
       onRefresh={refetch}
       refreshing={isFetching}
-      style={{ padding: 20 }}
       ListEmptyComponent={<EmptyState />}
       data={data}
       numColumns={1}

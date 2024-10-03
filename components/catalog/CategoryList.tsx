@@ -4,27 +4,31 @@ import { StyleSheet, View } from 'react-native';
 import { Category, useGetCategories } from '@/hooks/categories';
 import CategoryPill from './CategoryPill';
 import { useSearchScreenParams } from '@/hooks/useSearchParams';
+import { useState } from 'react';
 
 interface CategoryListProps {
   showAll?: boolean;
+  category?: string;
+  onPress?: (category: Category | null) => void;
 }
 
-const CategoryList = ({ showAll = true }: CategoryListProps) => {
+const CategoryList = ({
+  showAll = true,
+  category: initialCategory,
+  onPress,
+}: CategoryListProps) => {
   const { data } = useGetCategories();
-  const { navigate } = useRouter();
-  const { category: categoryId } = useSearchScreenParams();
+  const [categoryId, setCategoryId] = useState(initialCategory);
 
-  const clickHandler = (category?: Category) => {
-    navigate({
-      pathname: '/search',
-      params: { category: category?.id },
-    });
+  const clickHandler = (category: Category | null) => {
+    setCategoryId(category?.id);
+    onPress?.(category);
   };
 
   return (
     <View style={style.container}>
       {showAll && (
-        <CategoryPill active={!categoryId} onPress={() => clickHandler()}>
+        <CategoryPill active={!categoryId} onPress={() => clickHandler(null)}>
           Todos
         </CategoryPill>
       )}
@@ -44,7 +48,6 @@ const CategoryList = ({ showAll = true }: CategoryListProps) => {
 
 const style = StyleSheet.create({
   container: {
-    margin: 20,
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 4,

@@ -1,17 +1,11 @@
-import { Button, ButtonProps } from 'react-native-paper';
+import { Button, ButtonProps, Chip, ChipProps } from 'react-native-paper';
 
-export interface CategoryPillProps extends Omit<ButtonProps, 'mode'> {
+export interface CategoryPillProps extends Omit<ChipProps, 'mode'> {
   active?: boolean;
 }
 
 const CategoryPill = ({ active, ...btnProps }: CategoryPillProps) => {
-  return (
-    <Button
-      mode={active ? 'contained-tonal' : 'outlined'}
-      compact={true}
-      {...btnProps}
-    ></Button>
-  );
+  return <Chip selected={active} {...btnProps}></Chip>;
 };
 
 export default CategoryPill;
