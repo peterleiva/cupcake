@@ -11,5 +11,6 @@ export function productsMapper(product: ProductDTO): Product {
     category: product.category ? categoryDTOMap(product.category) : undefined,
     createdAt: DateTime.fromISO(product.createdAt),
     updatedAt: DateTime.fromISO(product.updatedAt),
+    favorite: product.favorite ?? false,
   };
 }

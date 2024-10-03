@@ -1,5 +1,5 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 
@@ -13,21 +13,32 @@ import { useModal } from '@/components/modal';
 import { useSearchScreenParams } from '@/hooks/useSearchParams';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDebounce } from '@uidotdev/usehooks';
 
 const Search = () => {
-  const { category: categoryId, favorites } = useSearchScreenParams();
+  const {
+    category: categoryId,
+    favorites,
+    searchterm: keyword,
+  } = useSearchScreenParams();
   const [searchQuery, setSearchQuery] = useState('');
   const { navigate } = useRouter();
   const { showModal } = useModal();
+  const [filter, setFilter] = useState<CatalogFilterParams | null>(null);
+  const searchterm = useDebounce(searchQuery, 300);
 
   const isFilterApplied: boolean = !!categoryId || !!favorites;
 
-  const onApplyFilter = ({ category, favorites }: CatalogFilterParams) => {
+  useEffect(() => {
     navigate({
       pathname: '/search',
-      params: { category: category?.id, favorites: favorites ? 1 : 0 },
+      params: {
+        category: filter?.category?.id,
+        favorites: filter?.favorites ? 1 : 0,
+        searchterm,
+      },
     });
-  };
+  }, [filter, searchterm]);
 
   return (
     <Suspense fallback={<Loader />}>
@@ -46,12 +57,16 @@ const Search = () => {
             color={isFilterApplied ? 'brown' : 'black'}
           />
         </View>
-        <CatalogList category={categoryId} />
+        <CatalogList
+          category={categoryId}
+          favorites={favorites}
+          searchterm={searchterm}
+        />
       </SafeAreaView>
       <CatalogFilterModal
         category={categoryId}
         favorites={favorites}
-        onFilter={onApplyFilter}
+        onFilter={setFilter}
       />
     </Suspense>
   );

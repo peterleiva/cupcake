@@ -7,10 +7,20 @@ import Loader from '../Loader';
 
 interface CatalogCardProps {
   category: string | null | undefined;
+  favorites?: boolean;
+  searchterm?: string;
 }
 
-export default function CatalogList({ category }: CatalogCardProps) {
-  const { data, isFetching, refetch, isLoading } = useGetProducts(category);
+export default function CatalogList({
+  category,
+  favorites,
+  searchterm,
+}: CatalogCardProps) {
+  const { data, isFetching, refetch, isLoading } = useGetProducts({
+    category,
+    favorites,
+    searchterm,
+  });
 
   const loadMore = () => {
     // refetch();
@@ -34,6 +44,7 @@ export default function CatalogList({ category }: CatalogCardProps) {
           name={product.name}
           price={product.price}
           category={product.category?.name}
+          favorite={product.favorite}
         ></CatalogCard>
       )}
     />

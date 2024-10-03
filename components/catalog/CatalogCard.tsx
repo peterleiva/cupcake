@@ -7,18 +7,25 @@ export interface CatalogCardProps {
   name: string;
   price: number;
   category?: string;
+  favorite?: boolean;
 }
 
 export default function CatalogCard({
   name,
   price,
   category,
+  favorite,
 }: CatalogCardProps) {
   return (
     <Card style={style.container}>
       <View style={style.actions}>
         {category && <Text style={style.category}>{category}</Text>}
-        <AntDesign style={style.likeBtn} name="hearto" size={16} color="red" />
+        <AntDesign
+          style={style.likeBtn}
+          name={favorite ? 'heart' : 'hearto'}
+          size={16}
+          color="red"
+        />
       </View>
       <Image
         style={{
