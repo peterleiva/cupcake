@@ -1,6 +1,6 @@
-import { View, Text, Image, StyleSheet, Platform, LogBox } from 'react-native';
+import { View, Image, StyleSheet, Platform } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { Card, IconButton } from 'react-native-paper';
+import { Card, IconButton, Text } from 'react-native-paper';
 import { formatCurrency } from '@/libs/currency';
 
 export interface CatalogCardProps {
@@ -44,6 +44,8 @@ export default function CatalogCard({
         <View>
           <Text style={style.captionPrice}>{formatCurrency(price)}</Text>
         </View>
+      </View>
+      <View>
         <IconButton
           icon="cart"
           size={24}

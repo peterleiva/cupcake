@@ -6,6 +6,7 @@ import CatalogCard from './CatalogCard';
 import Loader from '../Loader';
 import { useCart } from '@/hooks/cart';
 import { Snackbar } from 'react-native-paper';
+import { useSnackbar } from '../snackbar';
 
 interface CatalogCardProps {
   category: string | null | undefined;
@@ -24,9 +25,7 @@ export default function CatalogList({
     searchterm,
   });
 
-  const [visible, setVisible] = useState(false);
-  const onDismissSnackBar = () => setVisible(false);
-
+  const { snackbarAlert } = useSnackbar();
   const { addProduct } = useCart();
 
   const loadMore = () => {
@@ -38,7 +37,7 @@ export default function CatalogList({
   }
 
   const addProductToCart = (product: Product) => {
-    setVisible(true);
+    snackbarAlert('Produto adicionado ao carrinho');
     addProduct(product);
   };
 
@@ -62,9 +61,6 @@ export default function CatalogList({
           ></CatalogCard>
         )}
       />
-      <Snackbar visible={visible} onDismiss={onDismissSnackBar}>
-        Produto adicionado ao carrinho
-      </Snackbar>
     </>
   );
 }

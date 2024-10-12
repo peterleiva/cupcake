@@ -12,7 +12,7 @@ import {
   TextInput,
 } from 'react-native-paper';
 
-export default function ShoppingCartScreen() {
+export default function ShoppingCartModal() {
   const { navigate } = useRouter();
 
   const goBack = () => {

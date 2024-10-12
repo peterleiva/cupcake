@@ -14,6 +14,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ModalProvider } from '@/components/modal';
+import { Snackbar, SnackbarProvider } from '@/components/snackbar';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -44,14 +45,20 @@ export default function RootLayout() {
         >
           <PaperProvider>
             <ModalProvider>
-              <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen
-                  name="shopping-cart"
-                  options={{ presentation: 'modal', headerShown: false }}
-                ></Stack.Screen>
-                <Stack.Screen name="+not-found" />
-              </Stack>
+              <SnackbarProvider>
+                <Stack>
+                  <Stack.Screen
+                    name="(tabs)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="shopping-cart-modal"
+                    options={{ presentation: 'modal', headerShown: false }}
+                  ></Stack.Screen>
+                  <Stack.Screen name="+not-found" />
+                </Stack>
+                <Snackbar />
+              </SnackbarProvider>
             </ModalProvider>
           </PaperProvider>
         </ThemeProvider>
