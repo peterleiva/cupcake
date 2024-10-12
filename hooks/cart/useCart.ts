@@ -49,7 +49,7 @@ export function useCart() {
     return cartItems?.find((item) => item.product.id === product.id);
   };
 
-  const addProduct = (product: Product) => {
+  const addToCart = (product: Product) => {
     const item = getProductById(product);
 
     if (item) {
@@ -83,7 +83,7 @@ export function useCart() {
     updateQuantity,
     calculateTotal,
     removeProduct,
-    addProduct,
+    addToCart,
     clearCart,
   };
 }

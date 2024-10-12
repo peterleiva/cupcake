@@ -1,12 +1,11 @@
-import { Product, useGetProducts } from '@/hooks/products';
-import React, { useState } from 'react';
 import { FlatList, View } from 'react-native';
-import EmptyState from '../EmptyState';
-import CatalogCard from './CatalogCard';
-import Loader from '../Loader';
+
 import { useCart } from '@/hooks/cart';
-import { Snackbar } from 'react-native-paper';
+import { Product, useGetProducts } from '@/hooks/products';
+import EmptyState from '../EmptyState';
+import Loader from '../Loader';
 import { useSnackbar } from '../snackbar';
+import CatalogCard from './CatalogCard';
 
 interface CatalogCardProps {
   category: string | null | undefined;
@@ -19,14 +18,14 @@ export default function CatalogList({
   favorites,
   searchterm,
 }: CatalogCardProps) {
-  const { data, isFetching, refetch, isLoading } = useGetProducts({
+  const { data, isFetching, refetch } = useGetProducts({
     category,
     favorites,
     searchterm,
   });
 
   const { snackbarAlert } = useSnackbar();
-  const { addProduct } = useCart();
+  const { addToCart } = useCart();
 
   const loadMore = () => {
     // refetch();
@@ -37,13 +36,13 @@ export default function CatalogList({
   }
 
   const addProductToCart = (product: Product) => {
+    addToCart(product);
     snackbarAlert('Produto adicionado ao carrinho');
-    addProduct(product);
   };
 
   const toggleFavorite = (product: Product) => {
     snackbarAlert('Não implementado');
-    // toggleFavorite(product);
+    refetch();
   };
 
   return (
