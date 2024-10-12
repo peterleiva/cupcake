@@ -1,8 +1,16 @@
+import { useCart } from '@/hooks/cart';
+import { CartItem } from '@/hooks/cart/cart.interface';
+import { Product } from '@/hooks/products';
 import { formatCurrency } from '@/libs/currency';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
 import { FlatList, ListRenderItem, StyleSheet, Text, View } from 'react-native';
-import { Divider, IconButton, List, TextInput } from 'react-native-paper';
+import {
+  Button,
+  Divider,
+  IconButton,
+  List,
+  TextInput,
+} from 'react-native-paper';
 
 export default function ShoppingCartScreen() {
   const { navigate } = useRouter();
@@ -10,40 +18,18 @@ export default function ShoppingCartScreen() {
   const goBack = () => {
     navigate('../');
   };
-
-  const items = [
-    { id: '1', name: 'Item 1', price: 10.0, quantity: 1 },
-    { id: '2', name: 'Item 2', price: 20.0, quantity: 1 },
-    { id: '3', name: 'Item 3', price: 30.0, quantity: 1 },
-  ];
-
-  const [cartItems, setCartItems] = useState(items);
+  const { cartItems, updateQuantity, calculateTotal, clearCart } = useCart();
 
   const handleQuantityChange = (id: string, quantity: string) => {
     quantity = quantity.replace(/\D/g, '');
-
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              quantity: +quantity,
-            }
-          : item,
-      ),
-    );
+    updateQuantity(id, quantity);
   };
 
-  const renderItem: ListRenderItem<{
-    id: string;
-    name: string;
-    price: number;
-    quantity: number;
-  }> = ({ item }) => (
+  const renderItem: ListRenderItem<CartItem<Product>> = ({ item }) => (
     <View>
       <List.Item
-        title={item.name}
-        description={`Preço: ${formatCurrency(item.price)}`}
+        title={item.product.name}
+        description={`Preço: ${formatCurrency(item.product.price)}`}
         left={(props) => <List.Icon {...props} icon="cart" />}
         right={(props) => (
           <TextInput
@@ -51,7 +37,7 @@ export default function ShoppingCartScreen() {
             mode="outlined"
             label="qtd"
             value={item.quantity.toString()}
-            onChangeText={(text) => handleQuantityChange(item.id, text)}
+            onChangeText={(text) => handleQuantityChange(item.product.id, text)}
             style={{ width: 80 }}
             keyboardType="numeric"
           />
@@ -61,13 +47,6 @@ export default function ShoppingCartScreen() {
     </View>
   );
 
-  const calculateTotal = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0,
-    );
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -76,8 +55,14 @@ export default function ShoppingCartScreen() {
       <FlatList
         data={cartItems}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.product.id}
       />
+      <View style={styles.clearButtonContainer}>
+        <Button mode="contained" onPress={clearCart} style={styles.clearButton}>
+          Limpar Carrinho
+        </Button>
+      </View>
+
       <View style={styles.totalContainer}>
         <Text style={styles.totalText}>
           Total: {formatCurrency(calculateTotal())}
@@ -107,5 +92,12 @@ const styles = StyleSheet.create({
   totalText: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  clearButtonContainer: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  clearButton: {
+    marginTop: 10,
   },
 });
