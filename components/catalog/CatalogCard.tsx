@@ -9,6 +9,7 @@ export interface CatalogCardProps {
   category?: string;
   favorite?: boolean;
   addTocart?: () => void;
+  pressFavorite?: () => void;
 }
 
 export default function CatalogCard({
@@ -17,6 +18,7 @@ export default function CatalogCard({
   category,
   favorite,
   addTocart,
+  pressFavorite,
 }: CatalogCardProps) {
   return (
     <Card style={style.container}>
@@ -27,6 +29,7 @@ export default function CatalogCard({
           name={favorite ? 'heart' : 'hearto'}
           size={16}
           color="red"
+          onPress={pressFavorite}
         />
       </View>
       <Image

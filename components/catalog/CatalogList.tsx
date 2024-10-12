@@ -41,6 +41,11 @@ export default function CatalogList({
     addProduct(product);
   };
 
+  const toggleFavorite = (product: Product) => {
+    snackbarAlert('Não implementado');
+    // toggleFavorite(product);
+  };
+
   return (
     <>
       <FlatList
@@ -58,6 +63,7 @@ export default function CatalogList({
             category={product.category?.name}
             favorite={product.favorite}
             addTocart={() => addProductToCart(product)}
+            pressFavorite={() => toggleFavorite(product)}
           ></CatalogCard>
         )}
       />
