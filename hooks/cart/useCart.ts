@@ -1,26 +1,35 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { clearStorage, getValue, save } from '@/libs/async-storage';
 import { type Product } from '../products';
-import { setupProducts } from '../products/products.mock';
 import type { ShoppingCart } from './cart.interface';
 
-const items: ShoppingCart<Product> = setupProducts(3).map((product) => ({
-  quantity: 1,
-  product,
-}));
+const STORAGE_KEY = 'cart';
 
 export function useCart() {
-  const [cartItems, setCartItems] = useState<ShoppingCart<Product>>(items);
+  const [cartItems, setCartItems] = useState<ShoppingCart<Product>>([]);
 
-  const updateQuantity = (id: string, quantity: string) => {
-    quantity = quantity.replace(/\D/g, '');
+  useEffect(() => {
+    save(STORAGE_KEY, cartItems);
+  }, [cartItems]);
 
+  useEffect(() => {
+    (async () => {
+      const savedCart = await getValue<ShoppingCart<Product>>(STORAGE_KEY);
+
+      if (savedCart) {
+        setCartItems(savedCart);
+      }
+    })();
+  }, [setCartItems]);
+
+  const updateQuantity = (id: string, quantity: number) => {
     setCartItems((prevItems) =>
-      prevItems.map((item) =>
+      prevItems?.map((item) =>
         item.product.id === id
           ? {
               ...item,
-              quantity: +quantity,
+              quantity,
             }
           : item,
       ),
@@ -28,24 +37,26 @@ export function useCart() {
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce(
-      (total, { product, quantity }) => total + product.price * quantity,
-      0,
+    return (
+      cartItems?.reduce(
+        (total, { product, quantity }) => total + product.price * quantity,
+        0,
+      ) ?? 0
     );
   };
 
   const getProductById = (product: Product) => {
-    return cartItems.find((item) => item.product.id === product.id);
+    return cartItems?.find((item) => item.product.id === product.id);
   };
 
   const addProduct = (product: Product) => {
     const item = getProductById(product);
 
     if (item) {
-      updateQuantity(item.product.id, (item.quantity + 1).toString());
+      updateQuantity(item.product.id, item.quantity + 1);
     } else {
       setCartItems((prevItems) => [
-        ...prevItems,
+        ...(prevItems ?? []),
         {
           product,
           quantity: 1,
@@ -58,14 +69,13 @@ export function useCart() {
     const item = getProductById(product);
 
     if (item) {
-      setCartItems((prevItems) =>
-        prevItems.filter((item) => item.product.id !== product.id),
-      );
+      setCartItems(cartItems?.filter((item) => item.product.id !== product.id));
     }
   };
 
   const clearCart = () => {
-    setCartItems([]);
+    setCartItems(() => []);
+    clearStorage(STORAGE_KEY);
   };
 
   return {

@@ -22,7 +22,7 @@ export default function ShoppingCartScreen() {
 
   const handleQuantityChange = (id: string, quantity: string) => {
     quantity = quantity.replace(/\D/g, '');
-    updateQuantity(id, quantity);
+    updateQuantity(id, +quantity);
   };
 
   const renderItem: ListRenderItem<CartItem<Product>> = ({ item }) => (
@@ -32,15 +32,19 @@ export default function ShoppingCartScreen() {
         description={`Preço: ${formatCurrency(item.product.price)}`}
         left={(props) => <List.Icon {...props} icon="cart" />}
         right={(props) => (
-          <TextInput
-            {...props}
-            mode="outlined"
-            label="qtd"
-            value={item.quantity.toString()}
-            onChangeText={(text) => handleQuantityChange(item.product.id, text)}
-            style={{ width: 80 }}
-            keyboardType="numeric"
-          />
+          <View>
+            <TextInput
+              {...props}
+              mode="outlined"
+              label="qtd"
+              value={item.quantity.toString()}
+              onChangeText={(text) =>
+                handleQuantityChange(item.product.id, text)
+              }
+              style={{ width: 80 }}
+              keyboardType="numeric"
+            />
+          </View>
         )}
       />
       <Divider />
@@ -56,12 +60,23 @@ export default function ShoppingCartScreen() {
         data={cartItems}
         renderItem={renderItem}
         keyExtractor={(item) => item.product.id}
+        ListEmptyComponent={
+          <Text style={{ textAlign: 'center', padding: 20 }}>
+            Carrinho vazio
+          </Text>
+        }
       />
-      <View style={styles.clearButtonContainer}>
-        <Button mode="contained" onPress={clearCart} style={styles.clearButton}>
-          Limpar Carrinho
-        </Button>
-      </View>
+      {cartItems && cartItems.length > 0 && (
+        <View style={styles.clearButtonContainer}>
+          <Button
+            mode="contained"
+            onPress={clearCart}
+            style={styles.clearButton}
+          >
+            Limpar Carrinho
+          </Button>
+        </View>
+      )}
 
       <View style={styles.totalContainer}>
         <Text style={styles.totalText}>
