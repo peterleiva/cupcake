@@ -46,6 +46,10 @@ export default function RootLayout() {
             <ModalProvider>
               <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="shopping-cart"
+                  options={{ presentation: 'modal', headerShown: false }}
+                ></Stack.Screen>
                 <Stack.Screen name="+not-found" />
               </Stack>
             </ModalProvider>
