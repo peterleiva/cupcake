@@ -1,14 +1,25 @@
-import { useQuery } from '@tanstack/react-query';
+import { Page, PagedResultsDTO } from '@/libs/pagination';
+import {
+  DefaultError,
+  InfiniteData,
+  QueryKey,
+  useInfiniteQuery,
+} from '@tanstack/react-query';
 import { getProducts } from './products.api';
-import { Page } from '@/libs/pagination';
+import type { ProductDTO, ProductFilter } from './products.interface';
 import { productsMapper } from './products.map';
-import type { ProductFilter } from './products.interface';
 
 export function useGetProducts(
   { category, favorites, searchterm }: Partial<ProductFilter>,
-  { pageIndex = 0, pageSize = 20 }: Partial<Page> = {},
+  { pageIndex = 0, pageSize = 10 }: Partial<Page> = {},
 ) {
-  const query = useQuery({
+  const query = useInfiniteQuery<
+    PagedResultsDTO<ProductDTO>,
+    DefaultError,
+    InfiniteData<PagedResultsDTO<ProductDTO>, number>,
+    QueryKey,
+    number
+  >({
     queryKey: [
       'products',
       category,
@@ -17,9 +28,12 @@ export function useGetProducts(
       favorites,
       searchterm,
     ],
-    queryFn: async () => {
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) =>
+      lastPage.isFinalPage ? undefined : lastPage.pageIndex + 1,
+    queryFn: async ({ pageParam }) => {
       return getProducts(
-        { pageIndex, pageSize },
+        { pageIndex: pageParam, pageSize },
         { category, favorites, searchterm },
       );
     },
@@ -27,6 +41,8 @@ export function useGetProducts(
 
   return {
     ...query,
-    data: (query.data?.data ?? [])?.map?.(productsMapper),
+    data: query.data?.pages
+      .map((p) => p.data)
+      ?.flatMap?.((p) => p.map(productsMapper)),
   };
 }

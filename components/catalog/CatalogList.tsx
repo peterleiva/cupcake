@@ -18,26 +18,19 @@ export default function CatalogList({
   favorites,
   searchterm,
 }: CatalogCardProps) {
-  const { data, isFetching, refetch } = useGetProducts({
-    category,
-    favorites,
-    searchterm,
-  });
+  const { data, isFetching, refetch, hasNextPage, fetchNextPage } =
+    useGetProducts({
+      category,
+      favorites,
+      searchterm,
+    });
 
   const { snackbarAlert } = useSnackbar();
   const { addToCart } = useCart();
 
-  const loadMore = () => {
-    // refetch();
-  };
-
-  if (isFetching) {
-    return <Loader />;
-  }
-
   const addProductToCart = (product: Product) => {
-    addToCart(product);
-    snackbarAlert('Produto adicionado ao carrinho');
+    // addToCart(product);
+    snackbarAlert('Não implementado');
   };
 
   const toggleFavorite = (product: Product) => {
@@ -50,10 +43,13 @@ export default function CatalogList({
       <FlatList
         onRefresh={refetch}
         refreshing={isFetching}
-        ListEmptyComponent={<EmptyState />}
+        ListEmptyComponent={() => !isFetching && <EmptyState />}
         data={data}
         numColumns={1}
         ItemSeparatorComponent={() => <View style={{ height: 20 }}></View>}
+        onEndReached={() => {
+          !isFetching && hasNextPage && fetchNextPage();
+        }}
         renderItem={({ item: product }) => (
           <CatalogCard
             key={product.id}
@@ -66,6 +62,14 @@ export default function CatalogList({
             pressFavorite={() => toggleFavorite(product)}
           ></CatalogCard>
         )}
+        ListFooterComponent={() =>
+          isFetching &&
+          (hasNextPage || !data || data?.length === 0) && (
+            <View style={{ marginTop: 10 }}>
+              <Loader />
+            </View>
+          )
+        }
       />
     </>
   );

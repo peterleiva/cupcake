@@ -12,3 +12,12 @@ export interface PagedResults<T> {
   hasNextPage: boolean;
   nextPage: number;
 }
+
+export interface PagedResultsDTO<T> {
+  data: T[];
+  pageIndex: number;
+  pageSize: number;
+  total: number;
+  lastPage: number;
+  isFinalPage: boolean;
+}
