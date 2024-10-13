@@ -8,6 +8,7 @@ export interface ProductDTO {
   price: number;
   category?: CategoryDTO;
   favorite?: boolean;
+  thumbnail?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -18,6 +19,7 @@ export interface Product {
   description?: string;
   price: number;
   category?: Category;
+  thumbnail?: string;
   favorite: boolean;
   createdAt: DateTime;
   updatedAt: DateTime;

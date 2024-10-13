@@ -61,6 +61,7 @@ export default function CatalogList({
             price={product.price}
             category={product.category?.name}
             favorite={product.favorite}
+            thumbnail={product.thumbnail}
             addTocart={() => addProductToCart(product)}
             pressFavorite={() => toggleFavorite(product)}
           ></CatalogCard>

@@ -12,5 +12,6 @@ export function productsMapper(product: ProductDTO): Product {
     createdAt: DateTime.fromISO(product.createdAt),
     updatedAt: DateTime.fromISO(product.updatedAt),
     favorite: product.favorite ?? false,
+    thumbnail: product.thumbnail,
   };
 }

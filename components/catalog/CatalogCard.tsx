@@ -1,6 +1,15 @@
-import { View, Image, StyleSheet, Platform } from 'react-native';
+import {
+  View,
+  Image,
+  StyleSheet,
+  Platform,
+  ImageURISource,
+  ImageRequireSource,
+  ImageSourcePropType,
+} from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Card, IconButton, Text } from 'react-native-paper';
+import { Asset, useAssets } from 'expo-asset';
 import { formatCurrency } from '@/libs/currency';
 
 export interface CatalogCardProps {
@@ -8,6 +17,7 @@ export interface CatalogCardProps {
   price: number;
   category?: string;
   favorite?: boolean;
+  thumbnail?: string;
   addTocart?: () => void;
   pressFavorite?: () => void;
 }
@@ -18,8 +28,13 @@ export default function CatalogCard({
   category,
   favorite,
   addTocart,
+  thumbnail,
   pressFavorite,
 }: CatalogCardProps) {
+  const [assets] = useAssets(require('@/assets/images/placeholder.png'));
+
+  const placeholder = assets?.[0] as ImageSourcePropType | undefined;
+
   return (
     <Card style={style.container}>
       <View style={style.actions}>
@@ -34,11 +49,12 @@ export default function CatalogCard({
       </View>
       <Image
         style={{
+          width: 380,
           height: 150,
           borderTopLeftRadius: 12,
           borderTopRightRadius: 12,
         }}
-        source={{ uri: 'https://picsum.photos/200/150' }}
+        source={placeholder && !thumbnail ? placeholder : { uri: thumbnail }}
       ></Image>
       <View style={style.caption}>
         <View>
@@ -48,14 +64,14 @@ export default function CatalogCard({
           <Text style={style.captionPrice}>{formatCurrency(price)}</Text>
         </View>
       </View>
-      <View>
+      {/* <View>
         <IconButton
           icon="cart"
           size={24}
           onPress={addTocart}
           style={{ marginTop: 10 }}
         />
-      </View>
+      </View> */}
     </Card>
   );
 }
