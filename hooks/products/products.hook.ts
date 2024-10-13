@@ -4,8 +4,13 @@ import {
   InfiniteData,
   QueryKey,
   useInfiniteQuery,
+  useMutation,
 } from '@tanstack/react-query';
-import { getProducts } from './products.api';
+import {
+  addProductToFavorites,
+  getProducts,
+  removeProductFromFavorite,
+} from './products.api';
 import type { ProductDTO, ProductFilter } from './products.interface';
 import { productsMapper } from './products.map';
 
@@ -45,4 +50,17 @@ export function useGetProducts(
       .map((p) => p.data)
       ?.flatMap?.((p) => p.map(productsMapper)),
   };
+}
+
+export function useProductFavorite() {
+  const query = useMutation({
+    mutationKey: ['product', 'favorite'],
+    mutationFn: ({ id, favorite }: { id: string; favorite: boolean }) => {
+      return favorite
+        ? addProductToFavorites(id)
+        : removeProductFromFavorite(id);
+    },
+  });
+
+  return query;
 }

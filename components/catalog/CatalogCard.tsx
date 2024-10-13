@@ -1,18 +1,20 @@
-import {
-  View,
-  Image,
-  StyleSheet,
-  Platform,
-  ImageURISource,
-  ImageRequireSource,
-  ImageSourcePropType,
-} from 'react-native';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { Card, IconButton, Text } from 'react-native-paper';
-import { Asset, useAssets } from 'expo-asset';
+import { useProductFavorite } from '@/hooks/products';
 import { formatCurrency } from '@/libs/currency';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { useAssets } from 'expo-asset';
+import { useEffect, useState } from 'react';
+import {
+  Image,
+  ImageSourcePropType,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { ActivityIndicator, Card, Text } from 'react-native-paper';
+import { useSnackbar } from '../snackbar';
 
 export interface CatalogCardProps {
+  id: string;
   name: string;
   price: number;
   category?: string;
@@ -20,32 +22,56 @@ export interface CatalogCardProps {
   thumbnail?: string;
   addTocart?: () => void;
   pressFavorite?: () => void;
+  FavoriteLoading?: React.ReactNode;
 }
 
 export default function CatalogCard({
+  id,
   name,
   price,
   category,
   favorite,
-  addTocart,
   thumbnail,
   pressFavorite,
 }: CatalogCardProps) {
+  const mutation = useProductFavorite();
   const [assets] = useAssets(require('@/assets/images/placeholder.png'));
-
+  const [isFavorite, setIsFavorite] = useState(favorite);
+  const { snackbarAlert } = useSnackbar();
   const placeholder = assets?.[0] as ImageSourcePropType | undefined;
+
+  const handleFavorite = () => {
+    const favorite = !isFavorite;
+
+    mutation.mutate(
+      { id, favorite },
+      {
+        onSuccess: () => {
+          setIsFavorite(favorite);
+          snackbarAlert(
+            `Produto ${isFavorite ? 'removido' : 'adicionado'} aos favoritos`,
+          );
+          pressFavorite?.();
+        },
+      },
+    );
+  };
 
   return (
     <Card style={style.container}>
       <View style={style.actions}>
         {category && <Text style={style.category}>{category}</Text>}
-        <AntDesign
-          style={style.likeBtn}
-          name={favorite ? 'heart' : 'hearto'}
-          size={16}
-          color="red"
-          onPress={pressFavorite}
-        />
+        {mutation.isPending ? (
+          <ActivityIndicator />
+        ) : (
+          <AntDesign
+            style={style.likeBtn}
+            name={isFavorite ? 'heart' : 'hearto'}
+            size={16}
+            color="red"
+            onPress={handleFavorite}
+          />
+        )}
       </View>
       <Image
         style={{

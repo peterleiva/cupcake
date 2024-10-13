@@ -1,7 +1,7 @@
 import { FlatList, View } from 'react-native';
 
 import { useCart } from '@/hooks/cart';
-import { Product, useGetProducts } from '@/hooks/products';
+import { Product, useGetProducts, useProductFavorite } from '@/hooks/products';
 import EmptyState from '../EmptyState';
 import Loader from '../Loader';
 import { useSnackbar } from '../snackbar';
@@ -33,11 +33,6 @@ export default function CatalogList({
     snackbarAlert('Não implementado');
   };
 
-  const toggleFavorite = (product: Product) => {
-    snackbarAlert('Não implementado');
-    refetch();
-  };
-
   return (
     <>
       <FlatList
@@ -53,13 +48,13 @@ export default function CatalogList({
         renderItem={({ item: product }) => (
           <CatalogCard
             key={product.id}
+            id={product.id}
             name={product.name}
             price={product.price}
             category={product.category?.name}
             favorite={product.favorite}
             thumbnail={product.thumbnail}
             addTocart={() => addProductToCart(product)}
-            pressFavorite={() => toggleFavorite(product)}
           ></CatalogCard>
         )}
         ListFooterComponent={() =>

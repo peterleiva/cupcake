@@ -22,3 +22,17 @@ export async function getProducts(
 
   return res.data;
 }
+
+export async function addProductToFavorites(productId: string): Promise<void> {
+  const res = await axios.post(`${PRODUCTS_ENDPOINTS}/${productId}/favorite`);
+
+  return res.data;
+}
+
+export async function removeProductFromFavorite(
+  productId: string,
+): Promise<void> {
+  const res = await axios.delete(`${PRODUCTS_ENDPOINTS}/${productId}/favorite`);
+
+  return res.data;
+}
