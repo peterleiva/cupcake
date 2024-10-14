@@ -15,7 +15,7 @@ import type { ProductDTO, ProductFilter } from './products.interface';
 import { productsMapper } from './products.map';
 
 export function useGetProducts(
-  { category, favorites, searchterm }: Partial<ProductFilter>,
+  { category, favorites, searchterm }: Partial<ProductFilter> = {},
   { pageIndex = 0, pageSize = 10 }: Partial<Page> = {},
 ) {
   const query = useInfiniteQuery<

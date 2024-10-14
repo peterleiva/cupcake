@@ -2,14 +2,8 @@ import { useProductFavorite } from '@/hooks/products';
 import { formatCurrency } from '@/libs/currency';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useAssets } from 'expo-asset';
-import { useEffect, useState } from 'react';
-import {
-  Image,
-  ImageSourcePropType,
-  Platform,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { useState } from 'react';
+import { Image, Platform, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Card, Text } from 'react-native-paper';
 import { useSnackbar } from '../snackbar';
 
