@@ -55,6 +55,10 @@ export default function RootLayout() {
                     name="shopping-cart-modal"
                     options={{ presentation: 'modal', headerShown: false }}
                   ></Stack.Screen>
+                  <Stack.Screen
+                    name="favorites-modal"
+                    options={{ presentation: 'modal', headerShown: false }}
+                  ></Stack.Screen>
                   <Stack.Screen name="+not-found" />
                 </Stack>
                 <Snackbar />

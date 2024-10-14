@@ -13,10 +13,14 @@ export default function Header() {
     navigate(APP_ROUTES.shoppingCart());
   };
 
+  const goToFavorites = () => {
+    navigate(APP_ROUTES.favorites());
+  };
+
   return (
     <Appbar.Header>
       <Appbar.Content title="Cafeteria Gourmet" />
-      <Appbar.Action
+      {/* <Appbar.Action
         icon={() => (
           <>
             {cartItems && cartItems?.length > 0 && (
@@ -34,6 +38,10 @@ export default function Header() {
           </>
         )}
         onPress={goToCart}
+      /> */}
+      <Appbar.Action
+        icon={() => <AntDesign name="hearto" size={24} />}
+        onPress={goToFavorites}
       />
     </Appbar.Header>
   );

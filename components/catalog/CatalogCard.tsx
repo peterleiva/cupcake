@@ -38,7 +38,7 @@ export default function CatalogCard({
   const [assets] = useAssets(require('@/assets/images/placeholder.png'));
   const [isFavorite, setIsFavorite] = useState(favorite);
   const { snackbarAlert } = useSnackbar();
-  const placeholder = assets?.[0] as ImageSourcePropType | undefined;
+  const placeholder = assets?.[0];
 
   const handleFavorite = () => {
     const favorite = !isFavorite;
@@ -80,7 +80,7 @@ export default function CatalogCard({
           borderTopLeftRadius: 12,
           borderTopRightRadius: 12,
         }}
-        source={placeholder && !thumbnail ? placeholder : { uri: thumbnail }}
+        source={{ uri: thumbnail ?? placeholder?.uri }}
       ></Image>
       <View style={style.caption}>
         <View>
@@ -90,14 +90,6 @@ export default function CatalogCard({
           <Text style={style.captionPrice}>{formatCurrency(price)}</Text>
         </View>
       </View>
-      {/* <View>
-        <IconButton
-          icon="cart"
-          size={24}
-          onPress={addTocart}
-          style={{ marginTop: 10 }}
-        />
-      </View> */}
     </Card>
   );
 }
